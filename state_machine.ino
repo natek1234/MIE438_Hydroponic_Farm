@@ -37,6 +37,8 @@ void setup(void)
   //Set feed pina nd refill LED pin
   pinMode(FeedPin, OUTPUT);
   pinMode(RefillLED, OUTPUT);
+  digitalWrite(FeedPin, HIGH);
+  digitalWrite(RefillLED, LOW);
 
   //pH sensor
   pinMode(LED,OUTPUT);
@@ -125,11 +127,11 @@ void loop(void)
     else if(state == 4 and millis()>cooldown) { //Feed state
       if(t > end_time){
         state = prev_state;
-        digitalWrite(FeedPin, LOW);
+        digitalWrite(FeedPin, HIGH);
       }
       else{
          //feed plant
-        digitalWrite(FeedPin, HIGH);
+        digitalWrite(FeedPin, LOW);
       }
     }
   
