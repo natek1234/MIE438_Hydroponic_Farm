@@ -102,7 +102,6 @@ void loop(void)
         }
     }
     else if(state == 2){ //30 min light transition to off
-        int ;
         if(t > rise*1800000-1000 && t < rise*1800000+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
           state = 1;  
           t = 0;    
