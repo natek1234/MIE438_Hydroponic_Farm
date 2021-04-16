@@ -76,10 +76,12 @@ void loop(void)
 
   // Main state machine //
   //Only run every 30 minutes
-  if(t%1800000 < 1000 || t%1800000 > 1800000 - 1000){
+  int T = t%1800000;
+  if(T < 1000 || T > 1800000 - 1000){
     
     if(state == 0){ //Idle state lights on
-        if(t > daytime*3600000-1000 && t < daytime*3600000+1000){ //check if all the daylight hours have passed with a 1000 millisecond margin
+        int DAY = daytime*3600000;
+        if(t > DAY-1000 && t < DAY+1000){ //check if all the daylight hours have passed with a 1000 millisecond margin
           state = 2;  
           t = 0;    
         }
@@ -90,7 +92,8 @@ void loop(void)
         }
     }
     else if(state == 1){ //Idle state lights off
-        if(t > nightime*3600000-1000 && t < nightime*3600000+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
+        int NIGHT = nightime*3600000;
+        if(t > NIGHT-1000 && t < NIGHT+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
           state = 3;  
           t = 0;    
         }
@@ -101,25 +104,27 @@ void loop(void)
         }
     }
     else if(state == 2){ //30 min light transition to off
-        if(t > rise*1800000-1000 && t < rise*1800000+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
+        int R = rise*1800000;
+        if(t > R-1000 && t < R+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
           state = 1;  
           t = 0;    
         }
         else{
           //gradually turn lights off 
-          factor = t/(rise*1800000); //find factor by which to multiply max brightness
+          factor = t/(R); //find factor by which to multiply max brightness
           strip.setBrightness(255*(1-factor));
           strip.show();       
         }  
     }
     else if(state == 3) { //30 min light transition to on
-        if(t > rise*1800000-1000 && t < rise*1800000+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
+        int R = rise*1800000;
+        if(t > R-1000 && t < R+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
           state = 0;  
           t = 0;    
         }
         else{
           //gradually turn lights on
-          factor = t/(rise*1800000); //find factor by which to multiply max brightness
+          factor = t/(R); //find factor by which to multiply max brightness
           strip.setBrightness(255*factor);
           strip.show();
         }     
