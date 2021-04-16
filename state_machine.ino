@@ -76,11 +76,10 @@ void loop(void)
 
   // Main state machine //
   //Only run every 30 minutes
-  int T = t%1800000;
-  if(T < 1000 || T > 1800000 - 1000){
+  if(t%1800000 < 1000 || t%1800000 > 1800000 - 1000){
     
     if(state == 0){ //Idle state lights on
-        if(t > daytime*3600000-1000 && t < daytime*3600000+1000){ //check if all the daylight hours have passed with a 1000 millisecond margin
+        if((t+1000)/3600000 > daytime && (t-1000)/3600000 < daytime){ //check if all the daylight hours have passed with a 1000 millisecond margin
           state = 2;  
           t = 0;    
         }
@@ -91,7 +90,7 @@ void loop(void)
         }
     }
     else if(state == 1){ //Idle state lights off
-        if(t > nightime*3600000-1000 && t < nightime*3600000+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
+        if((t+1000)/3600000 > nightime && (t-1000)/3600000 < nightime){ //check if all the nightime hours have passed with a 1000 millisecond margin
           state = 3;  
           t = 0;    
         }
@@ -102,7 +101,7 @@ void loop(void)
         }
     }
     else if(state == 2){ //30 min light transition to off
-        if(t > rise*1800000-1000 && t < rise*1800000+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
+        if((t+1000)/1800000 > rise && (t-1000)/1800000 < rise){ //check if all the nightime hours have passed with a 1000 millisecond margin
           state = 1;  
           t = 0;    
         }
@@ -114,7 +113,7 @@ void loop(void)
         }  
     }
     else if(state == 3) { //30 min light transition to on
-        if(t > rise*1800000-1000 && t < rise*1800000+1000){ //check if all the nightime hours have passed with a 1000 millisecond margin
+        if((t+1000)/1800000 > rise && (t-1000)/1800000 < rise){ //check if all the nightime hours have passed with a 1000 millisecond margin
           state = 0;  
           t = 0;    
         }
